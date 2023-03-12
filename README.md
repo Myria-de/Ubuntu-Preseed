@@ -7,7 +7,7 @@ Wir verwenden die Desktop-Ausgabe von Ubuntu 22.04. Die Beschreibungen gelten si
 
 "preseed-minimal" enthält die Dateien für eine minimal automatische Installation. Lokalisierung, Benutzerkonto und Passwort, Uhr/Zeitzone und Hostname werdem vorbelegt. Per Script wird nach dem Setup ein zufälliger Hostname gesetzt. Außerdem besteht im Script die Möglichkeit, zusätzliche Pakete automatisch zu installieren. Lesen Sie die Kommentare in der Datei "auto-inst.seed" und passen Sie die Angaben an.
 
-"preseed-full" enthält alle Angaben für eine vollautomatische Installation ohne Benutzereingabe. Aber Vorsicht! Die automatische Partitionierung setzt voraus, das eine eindeutig definierte Zielfestplatte verfügbar ist. Lesen Sie die Kommentare in der Datei "auto-inst.seed" und passen Sie die Angaben an.
+"preseed-full" enthält alle Angaben für eine vollautomatische Installation ohne Benutzereingabe. Aber Vorsicht! Die automatische Partitionierung setzt voraus, dass eine eindeutig definierte Zielfestplatte verfügbar ist. Lesen Sie die Kommentare in der Datei "auto-inst.seed" und passen Sie die Angaben an.
 
 ## Links
 Für die automatische Installation müssen die Dateien aus der Ubuntu-ISO-Datei (https://ubuntu.com) extrahiert werden. Anschließend baut man die eigenen Konfigurationsdateien ein und erstellt eine neue ISO-Datei. Dabei unterstützt Sie das Tool [Cubic](https://github.com/PJ-Singh-001/Cubic) mit einer grafischen Oberfläche.
