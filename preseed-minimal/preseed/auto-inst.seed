@@ -38,7 +38,7 @@ d-i netcfg/get_domain string unassigned-domain
 # Davon darf es nur einen geben, daher in Script auslagern
 d-i preseed/late_command string cp /cdrom/preseed/postinstall.sh /target/root/; chmod +x /target/root/postinstall.sh; in-target /bin/bash /root/postinstall.sh
 
-# Das gleich wie oben für Ubiquity.
+# Das Gleiche wie oben für Ubiquity.
 ubiquity ubiquity/success_command string postinstall.sh
 ubiquity ubiquity/success_command string cp /cdrom/preseed/postinstall.sh /target/root/postinstall.sh \
  && chmod +x /target/root/postinstall.sh \
