@@ -1,0 +1,45 @@
+# Lokalisierung
+d-i debian-installer/locale string de_DE.UTF-8
+d-i localechooser/supported-locales multiselect de_DE.UTF-8
+d-i console-setup/ask_detect boolean false
+d-i console-setup/layoutcode string de
+d-i keyboard-configuration/xkb-keymap select de
+d-i debian-installer/language string de
+d-i debian-installer/country string DE
+
+# Benutzerkonto und Passwort
+# Ersetzten Sie "user" und "geheim"
+d-i passwd/user-fullname string user
+d-i passwd/username string user
+d-i passwd/user-password password geheim
+d-i passwd/user-password-again password geheim
+d-i passwd/auto-login boolean true
+d-i user-setup/allow-password-weak boolean true
+
+# Uhr/Zeitzone
+d-i clock-setup/utc-auto boolean true
+d-i clock-setup/utc boolean true
+d-i time/zone string Europe/Berlin
+d-i clock-setup/ntp boolean true
+
+# Netzwerk
+# hostname/domain wird später per Script postinstall.sh
+# durch einen zufälligen Namen ersetzt
+d-i netcfg/get_hostname string unassigned-hostname
+d-i netcfg/hostname string unassigned-hostname
+d-i netcfg/get_domain string unassigned-domain
+
+# Alternative: hostname vergeben
+#d-i netcfg/get_hostname string ub2b
+#d-i netcfg/get_domain string ub2b.local
+#d-i netcfg/choose_interface select auto
+
+# Benutzerdefinierter Befehl
+# Davon darf es nur einen geben, daher in Script auslagern
+d-i preseed/late_command string cp /cdrom/preseed/postinstall.sh /target/root/; chmod +x /target/root/postinstall.sh; in-target /bin/bash /root/postinstall.sh
+
+# Das gleich wie oben für Ubiquity.
+ubiquity ubiquity/success_command string postinstall.sh
+ubiquity ubiquity/success_command string cp /cdrom/preseed/postinstall.sh /target/root/postinstall.sh \
+ && chmod +x /target/root/postinstall.sh \
+ && in-target /bin/bash /root/postinstall.sh --ubiquity-success-command

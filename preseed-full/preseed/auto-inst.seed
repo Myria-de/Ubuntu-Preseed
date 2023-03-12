@@ -1,0 +1,101 @@
+### Software-Quellen
+d-i ubiquity/use_nonfree true
+d-i ubiquity/install_oem false
+# extras.ubuntu.com aktivieren
+d-i	apt-setup/extras	boolean true
+
+### Vorsicht! Partitionierung
+# !!!!
+# Vor der Verwendung das korrekte Ziellaufwerk prüfen
+# Das korrekte Gerät lässt sich nicht immer voraussagen
+d-i partman-auto/disk string /dev/sda
+
+# für Quemu /dev/vda verwenden
+# d-i partman-auto/disk string /dev/vda
+
+d-i partman-auto/method string regular
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-md/device_remove_md boolean true
+d-i partman-auto/choose_recipe select atomic
+
+# This makes partman automatically partition without confirmation
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+
+# Vorsicht! Erstellen der Partion/Formatierung nicht bestätigen
+# Wenn dieser Abschnitt auskommentiert ist, muss die Partitionierung zur Sicherheit bestätigt werden
+#d-i partman/confirm boolean true
+#d-i partman/confirm_nooverwrite boolean true
+
+### Automatische Installation
+d-i auto-install/enable boolean true
+d-i debconf/priority select critical
+
+# Locale Deutsch setzen
+d-i debian-installer/locale string de_DE.UTF-8
+d-i localechooser/supported-locales multiselect de_DE.UTF-8
+d-i console-setup/ask_detect boolean false
+d-i console-setup/layoutcode string de
+d-i keyboard-configuration/xkb-keymap select de
+d-i debian-installer/language string de_DE:de
+d-i debian-installer/country string DE
+
+# Benutzerkonto und Passwort
+# Ersetzen Sie "user" und "geheim"
+d-i passwd/user-fullname string te
+d-i passwd/username string user
+d-i passwd/user-password password geheim
+d-i passwd/user-password-again password geheim
+d-i passwd/auto-login boolean true
+d-i user-setup/allow-password-weak boolean true
+
+# Netzwerk
+# hostname/domain wird später per Script postinstall.sh
+# durch einen zufälligen Namen ersetzt
+d-i netcfg/get_hostname string unassigned-hostname
+d-i netcfg/hostname string unassigned-hostname
+d-i netcfg/get_domain string unassigned-domain
+
+# Alternative: hostname vergeben
+#d-i netcfg/get_hostname string ub2b
+#d-i netcfg/get_domain string ub2b.local
+#d-i netcfg/choose_interface select auto
+
+# Grub
+d-i grub-installer/grub2_instead_of_grub_legacy boolean true
+d-i grub-installer/only_debian boolean true
+
+# Installation auf dem ersten Gerät (Annahme: Das ist kein USB-Stick)
+# Andernfalls zur Sicherheit Gerät für die Boot-Installation angeben
+d-i grub-installer/bootdev string default
+
+# Uhr
+d-i clock-setup/utc-auto boolean true
+d-i clock-setup/utc boolean true
+d-i time/zone string Europe/Berlin
+d-i clock-setup/ntp boolean true
+
+# Packete, Mirrors, Image
+d-i base-installer/kernel/override-image string linux-server
+d-i base-installer/kernel/override-image string linux-image-amd64
+d-i mirror/country string DE
+d-i mirror/http/proxy string
+d-i apt-setup/restricted boolean true
+d-i apt-setup/universe boolean true
+d-i pkgsel/install-language-support boolean false
+
+d-i finish-install/reboot_in_progress note
+
+# Benutzerdefinierter Befehl
+# Davon darf es nur einen geben, daher in Script auslagern
+d-i preseed/late_command string cp /cdrom/preseed/postinstall.sh /target/root/; chmod +x /target/root/postinstall.sh; in-target /bin/bash /root/postinstall.sh
+
+# Das Gleiche wie oben für Ubiquity
+ubiquity ubiquity/success_command string postinstall.sh
+ubiquity ubiquity/success_command string cp /cdrom/preseed/postinstall.sh /target/root/postinstall.sh \
+ && chmod +x /target/root/postinstall.sh \
+ && in-target /bin/bash /root/postinstall.sh --ubiquity-success-command
+
+# Automatischer Reboot nach der Installation
+ubiquity ubiquity/reboot boolean true
+
