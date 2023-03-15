@@ -42,7 +42,11 @@ Damit räumen Sie das System auf und entfernen unnötige Dateien.
 
 **Schritt 4:** Diese Seite zeigt drei Bereiche für die entscheidenden Anpassungen. Unter „Kernel“ wählen Sie in der Regel die aktuelle Version. Gehen Sie auf „Preseed“. In der Baumansicht auf der linken Seite klicken Sie auf „preseed“ und dann in der Symbolleiste auf das Icon „Create a new file“. Geben Sie der Datei den Namen „auto-inst.seed“. Für eine minimale Konfiguration und einen ersten Test genügen die Zeilen aus der Abbildung. Damit werden Sprache, Benutzerkonto sowie die Zeitzone vorgegeben, müssen also bei der Installation nicht eingegeben werden.
 
+![auto-inst.seed-minimal](/images/302_01_Preseed.png "auto-inst.seed-minimal")
+
 **Schritt 5:** Gehen Sie auf „Boot“ und klicken Sie auf „grub.cfg“. Wir ergänzen hier den Menüeintrag „Auto-Installation mit Preseed“, der die neue seed-Datei berücksichtigt (siehe Abbildung). Die Option „automatic-ubiquity“ sorgt dafür, dass der Setupassistent Seiten überspringt, für die Werte bereits definiert sind. In die Datei „loopback.cfg“ wird der gleiche Inhalt eingetragen. Sie wird verwendet, wenn die Installation nicht direkt von einer DVD oder einem USB-Stick erfolgt, sondern über eine per Grub eingebundene ISO-Datei. Klicken Sie auf „Next“.
+
+![grub.cfg](/images/302_02_Boot.png "grub.cfg")
 
 **Schritt 6:** Wählen Sie die Komprimierungsmethode. Für eine möglichst geringe Größe wählen Sie „xz“, für schnellere Komprimierung eine der anderen Optionen. Danach klicken Sie auf „Generate“. Die angepasste ISO-Datei liegt danach im Arbeitsverzeichnis. Per Klick auf „Test“ lässt sich das Livesystem in Qemu starten und testen, ob das System bootet. Eine Installation ist jedoch nicht möglich, weil Cubic keine virtuelle Festplatte erstellt. In den Beispieldateien finden Sie zwei Scripts, über die sich Ubuntu testweise in Qemu installieren lässt.
 
