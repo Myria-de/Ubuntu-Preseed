@@ -54,7 +54,7 @@ In den Beispieldateien finden Sie im Ordner „qemu“ das Script „install_qem
 ```
 d-i partman-auto/disk string /dev/vda
 ```
-angegeben sein muss. Mit „run-qemu.sh“ lässt sich das System nach der Installation in Qemu starten.
+angegeben sein muss (nur bei preseed-full). Mit „run-qemu.sh“ lässt sich das System nach der Installation in Qemu starten.
 
 ## Links
 Für die automatische Installation müssen die Dateien aus der [Ubuntu-ISO-Datei](https://ubuntu.com) extrahiert werden. Anschließend baut man die eigenen Konfigurationsdateien ein und erstellt eine neue ISO-Datei. Dabei unterstützt Sie das Tool [Cubic](https://github.com/PJ-Singh-001/Cubic) mit einer grafischen Oberfläche.
