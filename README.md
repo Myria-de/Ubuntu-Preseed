@@ -48,7 +48,13 @@ Damit räumen Sie das System auf und entfernen unnötige Dateien.
 
 ![grub.cfg](/images/302_02_Boot.png "grub.cfg")
 
-**Schritt 6:** Wählen Sie die Komprimierungsmethode. Für eine möglichst geringe Größe wählen Sie „xz“, für schnellere Komprimierung eine der anderen Optionen. Danach klicken Sie auf „Generate“. Die angepasste ISO-Datei liegt danach im Arbeitsverzeichnis. Per Klick auf „Test“ lässt sich das Livesystem in Qemu starten und testen, ob das System bootet. Eine Installation ist jedoch nicht möglich, weil Cubic keine virtuelle Festplatte erstellt. In den Beispieldateien finden Sie im Ordner „qemu“ das Script „install_qemu.sh“, über die sich Ubuntu testweise in Qemu installieren lässt. Passen Sie den Pfad zur ISO-Datei und die Bezeichnung der virtuellen Festplatte an. Mit „run-qemu.sh“ lässt sich das System in Qemu starten.
+**Schritt 6:** Wählen Sie die Komprimierungsmethode. Für eine möglichst geringe Größe wählen Sie „xz“, für schnellere Komprimierung eine der anderen Optionen. Danach klicken Sie auf „Generate“. Die angepasste ISO-Datei liegt danach im Arbeitsverzeichnis. Per Klick auf „Test“ lässt sich das Livesystem in Qemu starten und testen, ob das System bootet. Eine Installation ist jedoch nicht möglich, weil Cubic keine virtuelle Festplatte erstellt. 
+
+In den Beispieldateien finden Sie im Ordner „qemu“ das Script „install_qemu.sh“, über die sich Ubuntu testweise in Qemu installieren lässt. Passen Sie den Pfad zur ISO-Datei und die Bezeichnung der virtuellen Festplatte an. Bitte beachten Sie, dass die Festplatte dafür in „auto-inst.seed“ mit
+```
+d-i partman-auto/disk string /dev/vda
+```
+angegeben sein muss. Mit „run-qemu.sh“ lässt sich das System nach der Installation in Qemu starten.
 
 ## Links
 Für die automatische Installation müssen die Dateien aus der [Ubuntu-ISO-Datei](https://ubuntu.com) extrahiert werden. Anschließend baut man die eigenen Konfigurationsdateien ein und erstellt eine neue ISO-Datei. Dabei unterstützt Sie das Tool [Cubic](https://github.com/PJ-Singh-001/Cubic) mit einer grafischen Oberfläche.
