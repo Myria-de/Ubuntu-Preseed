@@ -16,26 +16,31 @@ Die Konfigurationsdateien von Ubiquity und Subiquity unterscheiden sich grundsä
 
 **"preseed-manual-partition"** enthält die Dateien für eine minimal automatische Installation. Lokalisierung, Benutzerkonto und Passwort, Uhr/Zeitzone und Hostname werdem vorbelegt. Per Script wird nach dem Setup ein zufälliger Hostname gesetzt. Außerdem besteht im Script die Möglichkeit, zusätzliche Pakete automatisch zu installieren. Lesen Sie die Kommentare in der Datei "auto-inst.seed" beziehungsweise "autoinstall.yaml" und passen Sie die Angaben an.
 
-**"preseed-full-vm"** enthält alle Angaben für eine vollautomatische Installation ohne Benutzereingabe. Aber Vorsicht! Die automatische Partitionierung setzt voraus, dass eine eindeutig definierte Zielfestplatte verfügbar ist. Lesen Sie die Kommentare in der Datei "auto-inst.seed" beziehungsweise "autoinstall.yaml" und passen Sie die Angaben an. 
+**"preseed-full-vm"** enthält alle Angaben für eine vollautomatische Installation ohne Benutzereingabe. Aber Vorsicht! Die automatische Partitionierung setzt voraus, dass eine eindeutig definierte Zielfestplatte verfügbar ist. Lesen Sie die Kommentare in der Datei "auto-inst.seed" beziehungsweise "autoinstall.yaml" und passen Sie die Angaben an. Diese Methode ist vor allem für virtuelle Maschinen geeignet oder wenn sich auf physischer Hardware die Zielfestplatte eindeutig bestimmen lässt.
 
+**Das Basissystem aus der ISO-Datei:** Wenn Sie beim Gnome-Desktop bleiben wollen, verwenden Sie das ISO des Ubuntu-Desktopsystems (https://ubuntu.com/desktop), andernfalls Ubuntu Server (https://ubuntu.com/server). Der Unterbau von Ubuntu Server unterscheidet sich kaum von der Desktop-Version, eine grafische Oberfläche wird standardmäßig nicht installiert. Xfce, Cinnamon oder KDE lassen sich daher problemlos ergänzen. Bei Ubuntu Desktop bleibt Gnome erhalten, eine andere Oberfläche wird zusätzlich installiert.
 
+https://m6u.de/UBPRE
 
-
-## Angepasstes Livesystem mit Cubic
-Für die automatische Installation müssen die Dateien aus der Ubuntu-ISO-Datei (https://ubuntu.com) extrahiert werden. Anschließend baut man die eigenen Konfigurationsdateien ein und erstellt eine neue ISO-Datei. Dabei unterstützt Sie das Tool Cubic (https://github.com/PJ-Singh-001/Cubic) mit einer grafischen Oberfläche. Installieren Sie Cubic im Terminal mit diesen vier Befehlszeilen:
+## Angepasstes Live-System mit Cubic erstellen
+Das Tool Cubic (https://m6u.de/CUBIC) hilft mit einem Assistenten beim Erstellen einer angepassten ISO-Datei für das Ubuntu-Installationssystem. Richten Sie das Tool mit diesen vier Befehlszeilen ein:
 ```
 sudo apt-add-repository universe
 sudo apt-add-repository ppa:cubic-wizard/release
 sudo apt update
 sudo apt install --no-install-recommends cubic
 ```
-**Schritt 1:** Starten Sie das Tool und geben Sie ein Arbeitsverzeichnis an, beispielsweise den Ordner „Cubic“ in Ihrem Home-Verzeichnis. Nach einem Klick auf „Next“ wählen Sie hinter „Filename“ die ISO-Datei des Ubuntu-Installationsmediums. Klicken Sie auf „Next“.
+Als Vorbereitung laden Sie über https://m6u.de/UBPRE das Archiv mit den Beispieldateien herunter.
 
-**Schritt 2:** Sie befinden sich jetzt in der virtuellen Umgebung („chroot“), also im Dateisystem des Installationssystems. Mit
+**Wichtiger Hinweis:** Cubic aus dem PPA trägt zurzeit die Versionsnummer 2024.09.89 und kann mit ISO-Dateien bis Ubuntu 24.04.01 umgehen. In Ubuntu 24.04.2 hat Canonical die Struktur der Dateien verändert, woran Cubuc scheitert. Verwenden Sie daher weiter die Version 24.04.1, aus der über die Updates auch Version 24.04.2 wird. Alternativ finden Sie unter https://github.com/muquit/cubic-ubuntu-server-fix eine Cubic-Version, in der das Problem behoben ist. 
+
+**Schritt 1:** Starten Sie das Tool und geben Sie ein Arbeitsverzeichnis an, etwa den Ordner „Cubic“ in Ihrem Home-Verzeichnis. Wenn Sie später unterschiedliche Distributionen anpassen, erstellen Sie dafür jeweils ein eigenes Arbeitsverzeichnis. Nach einem Klick auf „Next“ wählen Sie hinter „Filename“ die ISO-Datei des Ubuntu-Installationsmediums. Vergeben Sie unter "Custom Disk..." hinter "Filename" eine sinvolle Bezeichung, beispielsweise "ubuntu-server-24.04-custom.iso"
+
+**Schritt 2:** Nach einem Klick auf „Next“ befinden sich in der virtuellen Umgebung („chroot“), also im Dateisystem des Installationssystems. Mit 
 ```
 apt update && apt upgrade
 ```
-bringen Sie das Livesystem auf den neusten Stand. Sie können zusätzliche Pakete installieren, beispielsweise den Terminal-Dateimanager Midnight Commander mit den zwei Zeilen
+aktualisieren Sie die Dateien im Live-System. Zusätzliche Pakete können Sie ebenfalls mit apt installieren. Beispielsweise Midnight Commander mit
 ```
 apt-add-repository universe
 apt install mc
@@ -50,23 +55,30 @@ apt-get clean
 ```
 Damit räumen Sie das System auf und entfernen unnötige Dateien.
 
-**Schritt 3:** Mit einem Klick auf „Next“ verlassen Sie die chroot-Umgebung. Cubic zeigt eine Liste mit Paketen, die im Livesystem enthalten sind, bei der Installation jedoch entfernt werden sollen. In der Regel können Sie die Einstellungen übernehmen oder Sie entfernen die Häkchen vor Paketen, die Sie behalten möchten. Setzen oder entfernen Sie die Häkchen in den Spalten „Typical“ und/oder „Minimal“, je nachdem, welche Installationsvariante Sie später verwenden. Klicken Sie auf „Next“.
+**Schritt 3:** Mit einem Klick auf „Next“ verlassen Sie die chroot-Umgebung. Die Seite zeigt drei Bereiche für die entscheidenden Anpassungen. Kopieren Sie von den Beispieldateien etwa aus dem Ordner „Ubuntu_24.04_Server“ den Ordner „boot“ nach „[Arbeitsverzeichnis]/custom-disk“. Wenn Sie das Desktop-ISO verwenden, kopieren Sie den Inhalt von „Ubuntu_24.04_Desktop“. Kopieren Sie den Inhalt des Ordners "preseed-vm-full" (für eine VM) oder "preseed-manual-partiton" (für die manuelle Partitionieruing) in den Ordner „[Arbeitsverzeichnis]/custom-disk/preseed“.
 
-**Schritt 4:** Diese Seite zeigt drei Bereiche für die entscheidenden Anpassungen. Unter „Kernel“ wählen Sie in der Regel die aktuelle Version. Gehen Sie auf „Preseed“. In der Baumansicht auf der linken Seite klicken Sie auf „preseed“ und dann in der Symbolleiste auf das Icon „Create a new file“. Geben Sie der Datei den Namen „auto-inst.seed“. Für eine minimale Konfiguration und einen ersten Test genügen die Zeilen aus der Abbildung. Damit werden Sprache, Benutzerkonto sowie die Zeitzone vorgegeben, müssen also bei der Installation nicht eingegeben werden.
+Entsprechend verfahren Sie mit den Dateien aus den Ordnern "Ubuntu_22.04" und "Linux_Mint_22" beide verwenden Konfigurationsdateien für den älteren Ubiquity-Installer.
 
-![auto-inst.seed-minimal](/images/302_01_Preseed.png "auto-inst.seed-minimal")
+**Schritt 4:** In Cubic sind die Dateien auf den Registerkarten „Preseed“ sowie „Boot“ zu sehen und Sie können Anpassungen in den Dateien „autoinstall.yaml“ und „postinstall.sh“ vornehmen. Die Konfiguration ist kommentiert und weist auf mögliche Änderungen hin, etwa für die Einrichtung einer anderen Desktop-Umgebung. Danach klicken Sie auf „Next“.
 
-**Schritt 5:** Gehen Sie auf „Boot“ und klicken Sie auf „grub.cfg“. Wir ergänzen hier den Menüeintrag „Auto-Installation mit Preseed“, der die neue seed-Datei berücksichtigt (siehe Abbildung). Die Option „automatic-ubiquity“ sorgt dafür, dass der Setupassistent Seiten überspringt, für die Werte bereits definiert sind. In die Datei „loopback.cfg“ wird der gleiche Inhalt eingetragen. Sie wird verwendet, wenn die Installation nicht direkt von einer DVD oder einem USB-Stick erfolgt, sondern über eine per Grub eingebundene ISO-Datei. Klicken Sie auf „Next“.
-
-![grub.cfg](/images/302_02_Boot.png "grub.cfg")
-
-**Schritt 6:** Wählen Sie die Komprimierungsmethode. Für eine möglichst geringe Größe wählen Sie „xz“, für schnellere Komprimierung eine der anderen Optionen. Danach klicken Sie auf „Generate“. Die angepasste ISO-Datei liegt danach im Arbeitsverzeichnis. Per Klick auf „Test“ lässt sich das Livesystem in Qemu starten und testen, ob das System bootet. Eine Installation ist jedoch nicht möglich, weil Cubic keine virtuelle Festplatte erstellt. 
-
-In den Beispieldateien finden Sie im Ordner „qemu“ das Script „install_qemu.sh“, über die sich Ubuntu testweise in Qemu installieren lässt. Passen Sie den Pfad zur ISO-Datei und die Bezeichnung der virtuellen Festplatte an. Bitte beachten Sie, dass die Festplatte dafür in „auto-inst.seed“ mit
+In der Datei „[Arbeitsverzeichnis]/custom-disk/boot/grub/grub.cfg“ sind die Menüeinträge für das Grub-Bootmenü enthalten. Darüber lässt sich steuern, welche Desktopumgebung installiert werden soll. Ein Beispiel für KDE:
 ```
-d-i partman-auto/disk string /dev/vda
+menuentry "KDE Auto-Installation mit autoinstall.yaml" {
+  set gfxpayload=keep
+  linux /casper/vmlinuz ipv6.disable=1 debug firefoxdeb kde autoinstall subiquity.autoinstallpath=/cdrom/preseed/autoinstall.yaml ---
+  initrd  /casper/initrd.gz
+}
 ```
-angegeben sein muss (nur bei preseed-full). Mit „run-qemu.sh“ lässt sich das System nach der Installation in Qemu starten.
+Mögliche Werte sind "ubuntu" für eine Gnome-Desktop sowie "xubuntu" und "cinnamon".
+
+Die zusätzliche Angabe "firefoxdeb" installiert Firefox als deb-Paket. Verwenden Sie stattdessen "chromiumdeb", wenn Sie Chromium installieren wollen.
+
+Klicken Sie auf "Next".
+
+**Schritt 5:** Wählen Sie die Komprimierungsmethode. Für eine geringere Dateigröße verwenden Sie „xz“ oder für eine schnellere, aber weniger effiziente Komprimierung eine der anderen Optionen. Abschließend klicken Sie auf „Generate“.
+Die angepasste ISO-Datei liegt danach im Arbeitsverzeichnis und lässt sich jetzt für die Ubuntu-Neuinstallation verwenden. Im Bootmenü sorgt „Auto-Installation mit autoinstall.yaml“ für die automatische Installation, mit den nachfolgenden Einträgen gelangen Sie wie gewohnt in das Live-System.
 
 ## Links
 Für die automatische Installation müssen die Dateien aus der [Ubuntu-ISO-Datei](https://ubuntu.com) extrahiert werden. Anschließend baut man die eigenen Konfigurationsdateien ein und erstellt eine neue ISO-Datei. Dabei unterstützt Sie das Tool [Cubic](https://github.com/PJ-Singh-001/Cubic) mit einer grafischen Oberfläche.
+
+Subiquity-Documentation: https://canonical-subiquity.readthedocs-hosted.com/en/latest/reference/autoinstall-reference.html
