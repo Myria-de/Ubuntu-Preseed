@@ -82,17 +82,13 @@ Klicken Sie auf "Next".
 Die angepasste ISO-Datei liegt danach im Arbeitsverzeichnis und lässt sich jetzt für die Ubuntu-Neuinstallation verwenden. Im Bootmenü sorgt „Auto-Installation mit autoinstall.yaml“ für die automatische Installation, mit den nachfolgenden Einträgen gelangen Sie wie gewohnt in das Live-System.
 
 ## Die angepasste ISO-Datei in einer virtuellen Maschine verwenden
-In der Regel richtet man virtuelle Maschinen über die grafische Oberfläche Virtual Machine Manager (KVM) oder Oracle VM VirtualBox Manager (Virtualbox)  ein. Per Script geht das im Terminal auch automatisch. Die Beispieldateien finden Sie im Ordner "Create_VMs". Verwenden Sie zum Beispiel "create_qcow_vm_ubuntu_server_24.04.sh", um eine VM für Virtual Machine Manager mit einer ISO-Datei zu erstellen, dei Sie auf Basis von Ubuntu Server  erzeugt haben.
+In der Regel richtet man virtuelle Maschinen über die grafische Oberfläche Virtual Machine Manager (KVM) oder Oracle VM VirtualBox Manager (Virtualbox)  ein. Per Script geht das im Terminal auch automatisch. Die Beispieldateien finden Sie im Ordner "Create_VMs". Verwenden Sie zum Beispiel "create_qcow_vm_ubuntu_server_24.04.sh", um eine VM für Virtual Machine Manager mit einer ISO-Datei zu erstellen, die Sie auf Basis von Ubuntu Server erzeugt haben.
 
-
-
-
-
-Da einige Optionen dafür erforderlich sind, haben wir das Bash-Script „create-vm-ubuntu-noble.sh“ erstellt (https://m6u.de/DEBST). Kopieren Sie es in das Arbeitsverzeichnis, das Sie bereits für die debootstrap-Installation verwendet haben, und öffnen Sie die Datei in einem Texteditor. Die Variablen im Konfigurationsabschnitt entsprechen denen aus dem Script „build-ubuntu-noble-image.sh“. Wenn Sie dort Anpassungen vorgenommen haben, übernehmen Sie diese. Starten Sie das Script (ohne sudo) im Terminal mit
-./create-vm-ubuntu-noble.sh
-Im Virtual Machine Manager erscheint eine neue VM, die automatisch startet. Da Installation und Konfiguration bereits erfolgt sind, können Sie das System sofort nutzen.
-
-
+Das Script erwarte die ISO-Datei im Ordner "ISO" im Arbeitsverzeichnis. Passen Sie den Namen im Script an, außerdem die Bezeichung für die VM. Starten Sie das Script mit 
+```
+./create_qcow_vm_ubuntu_server_24.04.sh
+```
+Im Virtual Machine Manager erscheint eine neue VM, die automatisch startet. Wählen Sie im Grub-Bootmenü den gewünschten Einrtrag und warten Sie, bis die Installation abgeschlossen ist.
 
 ## Links
 Für die automatische Installation müssen die Dateien aus der [Ubuntu-ISO-Datei](https://ubuntu.com) extrahiert werden. Anschließend baut man die eigenen Konfigurationsdateien ein und erstellt eine neue ISO-Datei. Dabei unterstützt Sie das Tool [Cubic](https://github.com/PJ-Singh-001/Cubic) mit einer grafischen Oberfläche.
