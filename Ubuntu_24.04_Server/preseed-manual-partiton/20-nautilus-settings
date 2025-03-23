@@ -1,0 +1,8 @@
+# Nautilus preferences
+# gsettings get org.gnome.nautilus.preferences default-folder-viewer
+[org/gnome/nautilus/preferences]
+default-folder-viewer = 'list_view'
+
+
+
+

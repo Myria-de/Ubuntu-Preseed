@@ -1,0 +1,119 @@
+# Documentation: https://canonical-subiquity.readthedocs-hosted.com/en/latest/reference/autoinstall-reference.html
+#
+# Benutzerkonto und Passwort
+# Ersetzten Sie die Werte unter "identity".
+# Ein eigenes Passwort erzeugen Sie mit 
+#   echo GeheimesPasswort | mkpasswd -m sha-256 -s
+# Das Beispielpasswort lautet ubuntu
+#
+# User name and password
+# Replace the values under "identity".
+# You can create your own password with
+#  echo SecretPassord | mkpasswd -m sha-256 -s
+# The example password is ubuntu
+
+autoinstall:
+  version: 1
+  # See https://canonical-subiquity.readthedocs-hosted.com/en/latest/reference/autoinstall-reference.html
+  # Vorsicht! Automatische Partitionierung.
+  # Caution! Automatic partitioning.
+  storage:
+    layout:
+      name: direct
+  # Das erste Benutzerkonto konfigurieren.
+  # Configure the initial user for the system.  
+  identity:
+    hostname: myhost
+    password: "$5$xaytgj5ygh81vb5f$tvAzrh67y8utSIX4sKrifWMEbd.KGjRaCj0trGsLWRA"
+    realname: user
+    username: user
+
+  # Eine Liste von Paketen, die im Zielsystem installiert werden sollen. Weitere Pakete lassen sich über postinstall.sh installieren.
+  # A list of packages to install into the target system.  
+  # Additional packages can be installed via postinstall.sh.  
+  packages:
+    - network-manager
+
+  # Steuert, ob das Installationsprogramm vor dem Fortfahren auf eine neue, im angegebenen Kanal verfügbare Version aktualisiert wird.
+  # Controls whether the installer updates to a new version available in the given channel before continuing.
+  refresh-installer:
+    update: true
+    
+  # Das Layout einer angeschlossenen Tastatur. Die Tastenbelegung entspricht den Einstellungen in der Konfigurationsdatei /etc/default/keyboard. Weitere Informationen finden Sie auf der Manualpage keyboard(5).  
+  # The layout of any attached keyboard. The mapping keys correspond to settings in the /etc/default/keyboard configuration file. See the keyboard(5) manual page for more details.  
+  keyboard:
+    layout: de
+
+  # Die für das installierte System zu konfigurierende Gebietsschema- und Zeitzone.
+ # The locale and timezone to configure for the installed system.
+  locale: de_DE.UTF-8
+  timezone: Europe/Berlin
+
+  # Konfigurieren Sie, ob allgemeine eingeschränkte Pakete (einschließlich Codecs) aus dem Multiverse-Repository installiert werden sollen.
+  # Configure whether common restricted packages (including codecs) from the multiverse repository are to be installed.
+  codecs:
+  codecs:
+    install: true
+  
+  # Ob die verfügbaren Treiber von Drittanbietern installiert werden sollen.
+  # Whether to install the available third-party drivers.   
+  drivers:
+    install: true
+# Wer Snap-Apps benötigt muss das hier festlegen. Eine Installation über postinstall.sh ist nicht möglich. Wenn möglich, sollte man darauf verzichten, weil die Installation lange dauert.
+# Verwenden Sie besser Firefox aus einem deb-Paket und Synaptic für die Paketverwaltung.
+# If you need Snap Apps, you'll need to specify them here. Installation via postinstall.sh isn't possible. If possible, you should avoid this because the installation takes a long time.
+# It is better to use Firefox from a deb package and Synaptic for package management.
+#  snaps:
+#    - name: firefox
+#    - name: gnome-3-38-2004
+#    - name: gtk-common-themes
+#    - name: snap-store
+#    - name: snapd-desktop-integration
+  # Die Art der Updates, die nach der Systeminstallation und vor dem Neustart des Zielsystems heruntergeladen und installiert werden.
+  # The type of updates that will be downloaded and installed after the system installation, and before rebooting into the target system.
+  updates: all
+  
+  # Shell-Befehle, die nach erfolgreicher Installation und Installation aller Updates und Pakete unmittelbar vor dem Neustart des Systems ausgeführt werden. Die Befehle werden in der Installationsumgebung ausgeführt, wobei das installierte System unter /target eingebunden ist.
+  # Shell commands to run after the installation has completed successfully and any updates and packages installed, just before the system reboots. The commands are run in the installer environment with the installed system mounted at /target.
+  late-commands:
+    - curtin in-target --target /target systemctl disable systemd-networkd-wait-online.service
+    - curtin in-target --target /target systemctl mask systemd-networkd-wait-online.service    
+    - curtin in-target --target /target systemctl enable NetworkManager.service  
+    - loadkeys de; localectl set-locale de_DE.UTF-8; export LANG=de_DE.UTF-8
+    - curtin in-target --target=/target locale-gen de_DE
+    - curtin in-target --target=/target locale-gen de_DE.UTF-8    
+    - curtin in-target --target=/target update-locale LANG="de_DE.UTF-8" LANGUAGE="de_DE"
+    - cp /cdrom/preseed/postinstall.sh /target/root/
+    # Aktiviert apt cacher (optional)
+    # enable apt cacher optional
+    #- cp /cdrom/preseed/02proxy /target/etc/apt/apt.conf.d/
+    - cp /cdrom/preseed/20-nautilus-settings /target/root/
+    - cp /cdrom/preseed/30-firefox-settings /target/root/    
+    - cp /cdrom/preseed/user /target/root/
+    - cp /cdrom/preseed/00-network-manager-all.yaml /target/root
+    - cp /cdrom/preseed/15-cinnamon-settings /target/root
+    
+    # Entfernt andere Pakete, die standardmäßig in Ubuntu Server vorhanden sind, aber normalerweise nicht in Ubuntu Desktop.
+    # Remove other packages present by default in Ubuntu Server but not normally present in Ubuntu Desktop.
+    - >-
+      curtin in-target -- apt-get remove -y
+      ubuntu-server ubuntu-server-minimal
+      binutils byobu dmeventd finalrd gawk
+      kpartx mdadm ncurses-term needrestart open-iscsi
+      sg3-utils sssd thin-provisioning-tools vim tmux
+      sosreport screen motd-news-config lxd-agent-loader
+      landscape-common git fonts-ubuntu-console
+
+    # Behalten Sie cloud-init, da es einen Teil der Installation beim ersten Start durchführt.
+    # Keep cloud-init, as it performs some of the installation on first boot.
+    - curtin in-target -- apt-get install -y cloud-init
+
+    # Entfernen Sie abschließend Dinge, die nur als Abhängigkeiten von anderen Dingen installiert sind, die wir bereits entfernt haben.
+    # Finally, remove things only installed as dependencies of other things we have already removed.
+    - curtin in-target -- apt-get autoremove -y      
+    - chmod +x /target/root/postinstall.sh
+    - curtin in-target --target=/target /bin/bash /root/postinstall.sh  
+  # Automatischer Neustart nach Abschluss der Installation.
+  # Automatic restart after installation is complete    
+  shutdown: reboot
+    

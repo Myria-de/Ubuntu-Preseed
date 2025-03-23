@@ -1,0 +1,10 @@
+[org/cinnamon/theme]
+name="Mint-L"
+
+[org/cinnamon/desktop/interface]
+cursor-theme='Bibata-Modern-Classic'
+gtk-theme='Mint-L'
+icon-theme='Mint-L'
+[org/gnome/desktop/interface]
+gtk-theme='Mint-L'
+icon-theme='Mint-L'

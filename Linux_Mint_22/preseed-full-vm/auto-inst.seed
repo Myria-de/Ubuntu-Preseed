@@ -1,0 +1,106 @@
+# Der Installer soll keine Fragen stellen
+# Setting installer to not ask questions
+d-i debconf/frontend select Noninteractive
+d-i debconf/priority select critical
+
+# Lokalisierung Deutsch
+d-i debian-installer/locale string de_DE.UTF-8
+d-i localechooser/supported-locales multiselect de_DE.UTF-8
+d-i console-setup/ask_detect boolean false
+d-i console-setup/layoutcode string de
+d-i keyboard-configuration/xkb-keymap select de
+d-i debian-installer/language string de
+d-i debian-installer/country string DE
+
+### Vorsicht! Partitionierung
+### Dangerous! Check settings
+# !!!!
+# Partitionierung
+#d-i partman-auto/disk string /dev/sda
+# Virtualbox/physische Hardware
+#ubiquity partman-auto/disk string /dev/sda
+# KVM/qemu
+ubiquity partman-auto/disk string /dev/vda
+
+ubiquity partman-auto/method string regular
+d-i partman-auto/choose_recipe select atomic
+d-i partman/default_filesystem string ext4
+d-i partman/choose_partition select finish
+
+# Partitionen ohne Rückfrage erstellen
+# This makes partman automatically partition without confirmation.
+ubiquity partman-md/confirm boolean true
+ubiquity partman-partitioning/confirm_write_new_label boolean true
+ubiquity partman/choose_partition select finish
+ubiquity partman/confirm boolean true
+ubiquity partman/confirm_nooverwrite boolean true
+
+# Keine Meldung nach Fertigstellung der Installation
+# Avoid that last message about the install being complete.
+d-i finish-install/reboot_in_progress note
+
+# Benutzerkonto und Passwort
+# Username and password
+# Ersetzten Sie die Werte hinter
+# Replace values after
+# d-i passwd/user-fullname string user (Benutzername/Username)
+# und 
+# and
+# d-i passwd/user-password-crypted
+#
+# Ein eigenes Passwort erzeugen Sie mit 
+# Create your own password
+# echo GeheimesPasswort | mkpasswd -m sha-256 -s
+# Das Beispielpasswort lautet ubuntu
+# Example passwort is ubuntu
+# Linux Mint seems not to accept encrypted password
+d-i passwd/user-fullname string user
+d-i passwd/username string user
+d-i passwd/user-password password ubuntu
+d-i passwd/user-password-again password ubuntu
+
+#d-i passwd/user-password-crypted $5$xaytgj5ygh81vb5f$tvAzrh67y8utSIX4sKrifWMEbd.KGjRaCj0trGsLWRA
+# Autologin
+# d-i passwd/auto-login boolean true
+d-i user-setup/allow-password-weak boolean true
+d-i user-setup/encrypt-home boolean false
+
+# Uhr/Zeitzone
+# Clock/Timezone
+d-i clock-setup/utc-auto boolean true
+d-i clock-setup/utc boolean true
+d-i time/zone string Europe/Berlin
+d-i clock-setup/ntp boolean true
+
+# Netzwerk
+# Network
+# hostname/domain wird später per Script postinstall.sh
+# durch einen zufälligen Namen ersetzt
+# hostname will be later replaced with random value
+# by script postinstall.sh
+d-i netcfg/get_hostname string unassigned-hostname
+d-i netcfg/hostname string unassigned-hostname
+d-i netcfg/get_domain string unassigned-domain
+
+# Alternative: hostname vergeben
+# Choose your own hostname
+#d-i netcfg/get_hostname string ub2b
+#d-i netcfg/get_domain string ub2b.local
+#d-i netcfg/choose_interface select auto
+
+# Benutzerdefinierte Befehle
+# Custom commands
+# Davon darf es nur einen geben, daher in Script auslagern
+# Only one is possible, therefore put it in a scripts
+d-i preseed/late_command string cp /cdrom/preseed/postinstall.sh /target/root/; chmod +x /target/root/postinstall.sh; in-target /bin/bash /root/postinstall.sh
+
+# Das gleich wie oben für Ubiquity.
+# The same with Ubiquity.
+ubiquity ubiquity/success_command string postinstall.sh
+ubiquity ubiquity/success_command string cp /cdrom/preseed/postinstall.sh /target/root/postinstall.sh \
+ && chmod +x /target/root/postinstall.sh \
+ && in-target /bin/bash /root/postinstall.sh --ubiquity-success-command
+# Install Linux Mint non free packages 
+ubiquity ubiquity/use_nonfree boolean true 
+d-i ubiquity/summary note
+ubiquity ubiquity/reboot boolean true

@@ -1,0 +1,75 @@
+# Documentation: https://canonical-subiquity.readthedocs-hosted.com/en/latest/reference/autoinstall-reference.html
+#
+# Benutzerkonto und Passwort
+# Ersetzten Sie die Werte unter "identity".
+# Ein eigenes Passwort erzeugen Sie mit 
+#   echo GeheimesPasswort | mkpasswd -m sha-256 -s
+# Das Beispielpasswort lautet ubuntu
+#
+# User name and password
+# Replace the values under "identity".
+# You can create your own password with
+#  echo SecretPassord | mkpasswd -m sha-256 -s
+# The example password is ubuntu
+
+autoinstall:
+  version: 1
+# Manuelle Partitionierung
+  interactive-sections:
+    - storage  
+  # Configure the initial user for the system. 
+  identity:
+    hostname: myhost
+    password: "$5$xaytgj5ygh81vb5f$tvAzrh67y8utSIX4sKrifWMEbd.KGjRaCj0trGsLWRA"
+    realname: user
+    username: user
+
+  # A list of packages to install into the target system.  
+  #packages:
+  #  - network-manager
+
+  # Controls whether the installer updates to a new version available in the given channel before continuing.
+  refresh-installer:
+    update: true
+    
+  # The layout of any attached keyboard. The mapping keys correspond to settings in the /etc/default/keyboard configuration file. See the keyboard(5) manual page for more details.  
+  keyboard:
+    layout: de
+
+# The locale and timezone to configure for the installed system.
+  locale: de_DE.UTF-8
+  timezone: Europe/Berlin
+
+  # Configure whether common restricted packages (including codecs) from the multiverse repository are to be installed.
+  codecs:
+    install: true
+  
+  # Whether to install the available third-party drivers.  
+  drivers:
+    install: true
+
+  # The type of updates that will be downloaded and installed after the system installation, and before rebooting into the target system.       
+  updates: all
+  
+  # Shell commands to run after the installation has completed successfully and any updates and packages installed, just before the system reboots. The commands are run in the installer environment with the installed system mounted at /target.
+  late-commands:
+    - loadkeys de; localectl set-locale de_DE.UTF-8; export LANG=de_DE.UTF-8    
+    - curtin in-target --target=/target locale-gen de_DE
+    - curtin in-target --target=/target locale-gen de_DE.UTF-8    
+    - curtin in-target --target=/target update-locale LANG="de_DE.UTF-8" LANGUAGE="de_DE"
+    - cp /cdrom/preseed/postinstall.sh /target/root/
+    # enable apt cacher optional
+    # - cp /cdrom/preseed/02proxy /target/etc/apt/apt.conf.d/
+    - cp /cdrom/preseed/20-nautilus-settings /target/root/
+    - cp /cdrom/preseed/30-firefox-settings /target/root/    
+    - cp /cdrom/preseed/user /target/root/
+    - cp /cdrom/preseed/15-cinnamon-settings /target/root
+    
+    # Finally, remove things only installed as dependencies of other things
+    # we have already removed.
+    - curtin in-target -- apt-get autoremove -y      
+    - chmod +x /target/root/postinstall.sh
+    - curtin in-target --target=/target /bin/bash /root/postinstall.sh  
+    
+  shutdown: reboot
+    

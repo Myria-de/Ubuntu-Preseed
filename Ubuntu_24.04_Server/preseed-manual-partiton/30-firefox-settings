@@ -1,0 +1,7 @@
+# Show Firefox in Dock
+[org/gnome/shell]
+favorite-apps = ['firefox.desktop','thunderbird.desktop','org.gnome.Nautilus.desktop','yelp.desktop','libreoffice-writer.desktop','org.gnome.Terminal.desktop']
+
+
+
+
