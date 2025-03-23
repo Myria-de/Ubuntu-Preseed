@@ -89,8 +89,10 @@ Das Script erwarte die ISO-Datei im Ordner "ISO" im Arbeitsverzeichnis. Passen S
 ./create_qcow_vm_ubuntu_server_24.04.sh
 ```
 Im Virtual Machine Manager erscheint eine neue VM, die automatisch startet. Wählen Sie im Grub-Bootmenü den gewünschten Einrtrag und warten Sie, bis die Installation abgeschlossen ist.
-![grub_menu](/images/grub_menu.png "grub_menu")
 
+![grub_menu](/images/Grub_Menu.png "grub_menu")
+
+Mit Virtualbox läuft es entsprechend ab. Verwenden Sie beispielsweise das Script "create_vbox_vm_ubuntu_24.04_server.sh", das Sie entsprechend Ihrer Konfiguration anpassen.
 
 ## Links
 Für die automatische Installation müssen die Dateien aus der [Ubuntu-ISO-Datei](https://ubuntu.com) extrahiert werden. Anschließend baut man die eigenen Konfigurationsdateien ein und erstellt eine neue ISO-Datei. Dabei unterstützt Sie das Tool [Cubic](https://github.com/PJ-Singh-001/Cubic) mit einer grafischen Oberfläche.
