@@ -75,6 +75,8 @@ Die zusätzliche Angabe "firefoxdeb" installiert Firefox als deb-Paket. Verwende
 
 Klicken Sie auf "Next".
 
+![autoinstall.yaml](/images/Cubic_autoinstall.yaml.png "autoinstall.yaml")
+
 **Schritt 5:** Wählen Sie die Komprimierungsmethode. Für eine geringere Dateigröße verwenden Sie „xz“ oder für eine schnellere, aber weniger effiziente Komprimierung eine der anderen Optionen. Abschließend klicken Sie auf „Generate“.
 Die angepasste ISO-Datei liegt danach im Arbeitsverzeichnis und lässt sich jetzt für die Ubuntu-Neuinstallation verwenden. Im Bootmenü sorgt „Auto-Installation mit autoinstall.yaml“ für die automatische Installation, mit den nachfolgenden Einträgen gelangen Sie wie gewohnt in das Live-System.
 
