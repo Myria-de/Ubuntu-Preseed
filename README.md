@@ -85,8 +85,24 @@ Die angepasste ISO-Datei liegt danach im Arbeitsverzeichnis und lässt sich jetz
 
 Die Beispieldateien für die automatische Installation decken einige Spezialfälle bei der Konfiguration ab.
 
-**Netzwerk:** Ubuntu-Server verwendet standardmäßig Netplan für die Netzwerkkonfiguration, beim Desktop kommt dageben Network Manager zum Einsatz. 
-####ToDo#####
+**Netzwerk:** Ubuntu-Server verwendet standardmäßig Netplan für die Netzwerkkonfiguration, beim Desktop kommt dageben Network Manager zum Einsatz. Für die frühe Installation verwendet man
+```
+  packages:
+    - network-manager
+```
+in der Datei autoinstall.yaml. Damit Network Manager statt systemd-networkd verwendet wird, muss die Datei "00-network-manager-all.yaml" im Ordner "/usr/lib/netplan" liegen. Diese hat folgenden Inhalt:
+```
+network:
+  version: 2
+  renderer: NetworkManager
+```  
+Wer Ubuntu-Desktop als Basis verwendet benötigt das nicht, weil Network Manager die Konfiguration bereits mitbringt.
+
+**Vorgabe von Einstellungen:** Wer mit der Ubuntu-Standardkonfiguration nicht zufrieden ist, kann die Einstellungen ändern. Ein Beispiel dafür zeigt "20-nautilus-settings", womit sich die Standardansicht im Dateimanager Nautilus von "Symbolansicht" auf "Listenansicht" setzen lässt. Die Datei gehört nach "/etc/dconf/db/local.d/". Dazu benötigt man noch die Datei "/etc/dconf/profile/user". Mit "dconf update" wird der Wert in die dconf-Datenbank geschrieben.
+
+**Paket-Download beschleunigen:** Wer mehrere Linux-PCs verwendet kann den Download von Paketen bei der Installation und bei Updates mit einem Cache beschleunigen. Das ist auch beim der häufigen automatischen Installation nützlich. 
+
+
 
 ## Die angepasste ISO-Datei in einer virtuellen Maschine verwenden
 In der Regel richtet man virtuelle Maschinen über die grafische Oberfläche Virtual Machine Manager (KVM) oder Oracle VM VirtualBox Manager (Virtualbox)  ein. Per Script geht das im Terminal auch automatisch. Die Beispieldateien finden Sie im Ordner "Create_VMs". Verwenden Sie zum Beispiel "create_qcow_vm_ubuntu_server_24.04.sh", um eine VM für Virtual Machine Manager mit einer ISO-Datei zu erstellen, die Sie auf Basis von Ubuntu Server erzeugt haben.
