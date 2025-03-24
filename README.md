@@ -81,6 +81,13 @@ Klicken Sie auf "Next".
 
 Die angepasste ISO-Datei liegt danach im Arbeitsverzeichnis und lässt sich jetzt für die Ubuntu-Neuinstallation verwenden. Im Bootmenü sorgt „Auto-Installation mit autoinstall.yaml“ für die automatische Installation, mit den nachfolgenden Einträgen gelangen Sie wie gewohnt in das Live-System.
 
+## Einige Besonderheiten
+
+Die Beispieldateien für die automatische Installation decken einige Spezialfälle bei der Konfiguration ab.
+
+**Netzwerk:** Ubuntu-Server verwendet standardmäßig Netplan für die Netzwerkkonfiguration, beim Desktop kommt dageben Network Manager zum Einsatz. 
+####ToDo#####
+
 ## Die angepasste ISO-Datei in einer virtuellen Maschine verwenden
 In der Regel richtet man virtuelle Maschinen über die grafische Oberfläche Virtual Machine Manager (KVM) oder Oracle VM VirtualBox Manager (Virtualbox)  ein. Per Script geht das im Terminal auch automatisch. Die Beispieldateien finden Sie im Ordner "Create_VMs". Verwenden Sie zum Beispiel "create_qcow_vm_ubuntu_server_24.04.sh", um eine VM für Virtual Machine Manager mit einer ISO-Datei zu erstellen, die Sie auf Basis von Ubuntu Server erzeugt haben.
 
