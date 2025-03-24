@@ -122,7 +122,7 @@ dafür, dass der Cache auch später im installierten System verwendet wird.
 ## Die angepasste ISO-Datei in einer virtuellen Maschine verwenden
 In der Regel richtet man virtuelle Maschinen über die grafische Oberfläche Virtual Machine Manager (KVM) oder Oracle VM VirtualBox Manager (Virtualbox)  ein. Per Script geht das im Terminal auch automatisch. Die Beispieldateien finden Sie im Ordner "Create_VMs". Verwenden Sie zum Beispiel "create_qcow_vm_ubuntu_server_24.04.sh", um eine VM für Virtual Machine Manager mit einer ISO-Datei zu erstellen, die Sie auf Basis von Ubuntu Server erzeugt haben.
 
-Das Script erwarte die ISO-Datei im Ordner "ISO" im Arbeitsverzeichnis. Passen Sie den Namen im Script an, außerdem die Bezeichung für die VM. Starten Sie das Script mit 
+Das Script erwarte die ISO-Datei im Ordner "ISO" im Arbeitsverzeichnis. Passen Sie den Namen im Script an, außerdem die Bezeichung für die VM und die Netzwerkkonfiguration. Starten Sie das Script mit 
 ```
 ./create_qcow_vm_ubuntu_server_24.04.sh
 ```
