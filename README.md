@@ -14,7 +14,7 @@ Die Installation mit Ubiquity und Subiquity kann komplett oder teilweise automat
 
 Die Konfigurationsdateien von Ubiquity und Subiquity unterscheiden sich grundsätzlich, erfüllen aber in etwa die gleichen Aufgaben. Sie finden Dateien mit Beispielkonfigurationen in den Ordnern für das jeweilige System.
 
-**Wichtig:** Sehen Sie sie die Beispielkonfiguration genau an und passen Sie dieses für Ihr eigenes Vorhaben an.
+**Wichtig:** Sehen Sie sich die Beispielkonfiguration genau an und passen Sie diese für Ihr eigenes Vorhaben an.
 
 **"preseed-manual-partition"** enthält die Dateien für eine minimal automatische Installation. Lokalisierung, Benutzerkonto und Passwort, Uhr/Zeitzone und Hostname werdem vorbelegt. Per Script wird nach dem Setup ein zufälliger Hostname gesetzt. Außerdem besteht im Script die Möglichkeit, zusätzliche Pakete automatisch zu installieren. Lesen Sie die Kommentare in der Datei "auto-inst.seed" beziehungsweise "autoinstall.yaml" und passen Sie die Angaben an.
 
