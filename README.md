@@ -3,6 +3,8 @@ Preseed configuration for Ubuntu 22.04 and 24.04
 
 Die Installation von Ubuntu ist zwar nicht besonders aufwendig, erfordert aber dennoch einige Benutzereingaben. Wer das System häufiger neu installiert, etwa in einer virtuellen Maschine oder auf mehreren Schulungs-PCs, kann die Installation komplett oder teilweise automatisieren. Nebenbei kann man das Live-System mit zusätzlichen Paketen und Updates ausstatten, was die Arbeiten nach der Installation reduziert.
 
+**Download zu diesem Artikel**: Über https://m6u.de/UBPRE laden Sie das Komplettpaket herunter oder Sie laden die Dateien von dieser Github-Seite.
+
 ## Die Automatisierung der Ubuntu-Installer
 Auf Ubuntu basierende Distributionen verwenden unterschiedliche Tools für die Installation. Bis einschließlich Ubuntu 22.04 kam Ubiquity zum Einsatz, das mit dem Debian-Installationsassistenten verwandt ist (Dokumentation siehe https://bit.ly/UBPRE). Linux Mint 22.1 verwendet diesen Installer weiterhin. 
 
