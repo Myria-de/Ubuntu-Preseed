@@ -61,6 +61,8 @@ Entsprechend verfahren Sie mit den Dateien aus den Ordnern "Ubuntu_22.04" und "L
 
 **Schritt 4:** In Cubic sind die Dateien auf den Registerkarten „Preseed“ sowie „Boot“ zu sehen und Sie können Anpassungen in den Dateien „autoinstall.yaml“ und „postinstall.sh“ vornehmen. Die Konfiguration ist kommentiert und weist auf mögliche Änderungen hin, etwa für die Einrichtung einer anderen Desktop-Umgebung. Danach klicken Sie auf „Next“.
 
+**Wichtig:** Achten Sie auf korrekte Einrückungen in der Datei „autoinstall.yaml“. Ansonsten tritt ein Fehler auf und die automatische Installation schlägt fehl.
+
 In der Datei „[Arbeitsverzeichnis]/custom-disk/boot/grub/grub.cfg“ sind die Menüeinträge für das Grub-Bootmenü enthalten. Darüber lässt sich steuern, welche Desktopumgebung installiert werden soll. Ein Beispiel für KDE:
 ```
 menuentry "KDE Auto-Installation mit autoinstall.yaml" {
@@ -100,9 +102,22 @@ Wer Ubuntu-Desktop als Basis verwendet benötigt das nicht, weil Network Manager
 
 **Vorgabe von Einstellungen:** Wer mit der Ubuntu-Standardkonfiguration nicht zufrieden ist, kann die Einstellungen ändern. Ein Beispiel dafür zeigt "20-nautilus-settings", womit sich die Standardansicht im Dateimanager Nautilus von "Symbolansicht" auf "Listenansicht" setzen lässt. Die Datei gehört nach "/etc/dconf/db/local.d/". Dazu benötigt man noch die Datei "/etc/dconf/profile/user". Mit "dconf update" wird der Wert in die dconf-Datenbank geschrieben.
 
-**Paket-Download beschleunigen:** Wer mehrere Linux-PCs verwendet kann den Download von Paketen bei der Installation und bei Updates mit einem Cache beschleunigen. Das ist auch beim der häufigen automatischen Installation nützlich. 
+**Paket-Download beschleunigen:** Wer mehrere Linux-PCs (Ubuntu, Linux Mint, Debian) verwendet kann den Download von Paketen bei der Installation und bei Updates mit einem Cache beschleunigen. Das ist auch bei häufigen automatischen Installationen nützlich. Die Installation des Cache erfolgt auf einem ständig verfügbaren Server-PC mit 
+```  
+sudo apt install apt-cacher-ng
+```  
+Für weitere Infos siehe [Schnellere Updates für Linux-PCs auf gleicher Basis](https://www.pcwelt.de/1150247)
 
-
+Auf den Clients benötigt man die Datei „/etc/apt/apt.conf.d/02proxy“ mit einem Inhalt wie
+```  
+Acquire::http { Proxy "http://192.168.178.111:3142"; };
+Acquire::https { Proxy "https//"; };
+```
+Ersetzen Sie die IP-Nummer durch die Ihres Server-PCs. Kopieren Sie "02proxy" bei Cubic in den Ordner "custom-root/etc/apt/apt.conf.d", damit das Installationssystem den Cache verwendet. In der Datei "autoinstall.yaml" sorgt die Zeile
+```
+- cp /cdrom/preseed/02proxy /target/etc/apt/apt.conf.d/
+```
+dafür, dass der Cache auch später im installierten System verwendet wird.
 
 ## Die angepasste ISO-Datei in einer virtuellen Maschine verwenden
 In der Regel richtet man virtuelle Maschinen über die grafische Oberfläche Virtual Machine Manager (KVM) oder Oracle VM VirtualBox Manager (Virtualbox)  ein. Per Script geht das im Terminal auch automatisch. Die Beispieldateien finden Sie im Ordner "Create_VMs". Verwenden Sie zum Beispiel "create_qcow_vm_ubuntu_server_24.04.sh", um eine VM für Virtual Machine Manager mit einer ISO-Datei zu erstellen, die Sie auf Basis von Ubuntu Server erzeugt haben.
